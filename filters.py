@@ -39,3 +39,16 @@ def adaptive_threshold(img, window_size=25, c=10.0):
         raise ValueError("window_size must be odd and >= 3")
     local_mean = ndimage.uniform_filter(img.astype(float), size=window_size)
     return np.where(img < local_mean - c, 0.0, 255.0)
+
+def median_blur(img, size=3):
+    if size < 3 or size % 2 == 0:
+        raise ValueError("size must be odd and >= 3")
+    return ndimage.median_filter(img.astype(float), size=size)
+
+
+def add_salt_pepper(img, prob=0.05):
+    out = img.astype(float).copy()
+    rnd = np.random.rand(*img.shape)
+    out[rnd < prob / 2] = 0.0
+    out[rnd > 1 - prob / 2] = 255.0
+    return out

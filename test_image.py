@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from filters import adaptive_threshold, add_noise, gaussian_blur, sobel_edges, to_grayscale
+from filters import adaptive_threshold, add_noise, gaussian_blur, sobel_edges, to_grayscale, add_salt_pepper, median_blur
 from metrics import contrast, mse, psnr
 
 
@@ -64,3 +64,10 @@ def test_binary_output_values():
     unique = set(np.unique(binary))
     assert unique.issubset({0.0, 255.0})
     assert contrast(binary) > 0
+
+def test_median_beats_gaussian_on_salt_pepper():
+    np.random.seed(1)
+    raw = np.array(Image.open("input.jpg"))
+    gray = to_grayscale(raw)
+    sp = add_salt_pepper(gray, prob=0.05)
+    assert psnr(gray, median_blur(sp, size=3)) > psnr(gray, gaussian_blur(sp, sigma=1.2))
