@@ -3,7 +3,4 @@
 venv/
 .venv/
 *.pyc
-noisy.png
-denoised.png
-edges.png
-binary.png
+results/

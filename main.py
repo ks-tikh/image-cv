@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from PIL import Image
 
@@ -10,8 +11,10 @@ def save_img(arr, filename):
 
 
 def main():
+    os.makedirs("results", exist_ok=True)
+
     np.random.seed(42)
-    raw = np.array(Image.open("input.png"))
+    raw = np.array(Image.open("input.jpg"))
     gray = to_grayscale(raw)
 
     noisy = add_noise(gray, std=20.0)
@@ -19,10 +22,10 @@ def main():
     edges = sobel_edges(denoised)
     binary = adaptive_threshold(denoised, window_size=25, c=10.0)
 
-    save_img(noisy, "noisy.png")
-    save_img(denoised, "denoised.png")
-    save_img(edges, "edges.png")
-    save_img(binary, "binary.png")
+    save_img(noisy, "results/noisy.png")
+    save_img(denoised, "results/denoised.png")
+    save_img(edges, "results/edges.png")
+    save_img(binary, "results/binary.png")
 
     print(f"MSE noisy:    {mse(gray, noisy):.2f}")
     print(f"MSE denoised: {mse(gray, denoised):.2f}")

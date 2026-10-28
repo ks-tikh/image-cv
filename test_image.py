@@ -48,7 +48,7 @@ def test_sobel_flat_image_zero():
 @pytest.mark.parametrize("noise_std", [20.0, 30.0, 40.0])
 def test_gaussian_filter_improves_psnr(noise_std):
     np.random.seed(0)
-    raw = np.array(Image.open("input.png"))
+    raw = np.array(Image.open("input.jpg"))
     gray = to_grayscale(raw)
     noisy = add_noise(gray, std=noise_std)
     denoised = gaussian_blur(noisy, sigma=1.0)
@@ -58,7 +58,7 @@ def test_gaussian_filter_improves_psnr(noise_std):
 
 
 def test_binary_output_values():
-    raw = np.array(Image.open("input.png"))
+    raw = np.array(Image.open("input.jpg"))
     gray = to_grayscale(raw)
     binary = adaptive_threshold(gray)
     unique = set(np.unique(binary))
